@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spencer's Dogwalkery — Availability Calendar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0b2545;
+      --gold: #d4a547;
+      --muted: #f5f7fb;
+      --text: #1b2b3a;
+      --card-shadow: 0 6px 18px rgba(8, 20, 40, 0.08);
+      --max-width: 1200px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Lato, sans-serif; color: var(--text); background: white; }
+    header, footer { background: white; }
+    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 20px; }
+    .cta-btn { background: var(--gold); color: white; border: none; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 700; }
+    .calendar { margin-top: 20px; background: var(--muted); padding: 20px; border-radius: 12px; box-shadow: var(--card-shadow); }
+    .calendar h4 { margin-top: 0; color: var(--navy); }
+    table.calendar-table { width: 100%; border-collapse: collapse; text-align: center; }
+    table.calendar-table th, table.calendar-table td { padding: 10px; border-radius: 8px; }
+    table.calendar-table th { background: var(--navy); color: white; }
+    table.calendar-table td.available { background: #e9fbe9; color: #2a652a; cursor: pointer; }
+    table.calendar-table td.unavailable { background: #fbe9e9; color: #b52a2a; }
+    table.calendar-table td:hover.available { background: #d0f2d0; }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <h1 style="font-family:'Playfair Display',serif;color:var(--navy);">Spencer's Dogwalkery</h1>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2>Availability Calendar</h2>
+      <p>Select a date below to request a walk.</p>
+      <div class="calendar">
+        <h4>October 2025</h4>
+        <table class="calendar-table">
+          <thead>
+            <tr>
+              <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+            </tr>
+          </thead>
+          <tbody id="calendar-body"></tbody>
+        </table>
+      </div>
+      <div id="selected-date" style="margin-top:16px;font-weight:600;color:var(--navy);"></div>
+      <button class="cta-btn" id="book-btn" disabled>Request Walk</button>
+    </section>
+  </main>
+
+  <footer class="container" style="margin-top:40px;padding:20px 0;border-top:1px solid #e5e9ef;text-align:center;color:#667;">
+    © 2025 Spencer's Dogwalkery
+  </footer>
+
+  <script>
+    const calendarBody = document.getElementById('calendar-body');
+    const selectedDate = document.getElementById('selected-date');
+    const bookBtn = document.getElementById('book-btn');
+    const availableDays = [2,5,8,12,15,19,22,26,29];
+
+    function buildCalendar() {
+      const daysInMonth = 31;
+      let day = 1;
+      for (let i = 0; i < 5; i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < 7; j++) {
+          const cell = document.createElement('td');
+          if (day <= daysInMonth) {
+            cell.textContent = day;
+            if (availableDays.includes(day)) {
+              cell.classList.add('available');
+              cell.addEventListener('click', () => selectDay(day));
+            } else {
+              cell.classList.add('unavailable');
+            }
+            day++;
+          } else {
+            cell.textContent = '';
+          }
+          row.appendChild(cell);
+        }
+        calendarBody.appendChild(row);
+      }
+    }
+
+    function selectDay(day) {
+      selectedDate.textContent = `Selected: October ${day}, 2025 (Available)`;
+      bookBtn.disabled = false;
+    }
+
+    bookBtn.addEventListener('click', () => {
+      alert(selectedDate.textContent + '\nBooking request submitted!');
+    });
+
+    buildCalendar();
+  </script>
+</body>
+</html>
